@@ -3,18 +3,31 @@ Tools to expand the Sonic the Hedgehog: Project '06 custom stage creator's possi
 
 # Features
 Play custom animations whenever you want
+
 Play custom sounds at any point during the animations
+
 Change the stage background music
+
 Change the current playable character quickly
+
 Load/Unload objects
+
 Teleport the current character
+
 Chain cutscenes together
+
 Spawn vehicles
+
 Spawn thorns
+
 Create custom triggers that drain rings
+
 Create custom triggers that hurt the player
+
 Instantly change the character
+
 Create switches
+
 Add counters
 
 # Installing 
