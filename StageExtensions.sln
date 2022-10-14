@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32328.378
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "P06Cutscenes", "P06Cutscenes\P06Cutscenes.csproj", "{9962826F-880B-42E3-8B98-04897877C387}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StageExtensions", "P06Cutscenes\StageExtensions.csproj", "{9962826F-880B-42E3-8B98-04897877C387}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

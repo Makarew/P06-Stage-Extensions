@@ -1,16 +1,18 @@
 ﻿using UnityEngine;
 
-namespace P06Cutscenes
+namespace StageExtensions
 {
     public class AutoDisable : MonoBehaviour
     {
         private int c = 5;
-        private bool inArea;
+        internal bool inArea;
 
         public GameObject target;
         public AudioClip respawnBGM;
 
         private AudioSource mainSource;
+
+        internal bool triggerEx = true;
 
         private void Start()
         {
@@ -31,6 +33,13 @@ namespace P06Cutscenes
             {
                 c = -1;
                 target.SetActive(false);
+
+                DamageObject[] obj = transform.GetComponentsInChildren<DamageObject>();
+
+                for (int i = 0; i < obj.Length; i++)
+                {
+                    obj[i].player = null;
+                }
             }
         }
 
@@ -40,6 +49,10 @@ namespace P06Cutscenes
             {
                 inArea = true;
                 target.SetActive(true);
+
+                c = 5;
+
+                triggerEx = false;
 
                 if (mainSource.time < 1)
                 {
@@ -54,6 +67,16 @@ namespace P06Cutscenes
             if (other.tag == "Player")
             {
                 inArea = false;
+                triggerEx = true;
+            }
+        }
+
+        private void OnTriggerStay(Collider other)
+        {
+            if (other.tag == "Player" && triggerEx == true)
+            {
+                triggerEx = false;
+                inArea = true;
             }
         }
     }

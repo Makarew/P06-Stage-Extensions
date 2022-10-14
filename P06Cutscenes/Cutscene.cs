@@ -1,26 +1,39 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace P06Cutscenes
+namespace StageExtensions
 {
     public class Cutscene : MonoBehaviour
     {
+        public bool hideUI = true;
+
         [Header("Cutscene Playables")]
         public Animator[] animators;
         public AnimationClip[] clips;
 
         public AudioClip[] sounds;
         public float[] soundStartTimes;
-        private List<bool> isPlaying;
         private List<AudioSource> sources;
+        private List<bool> sourceStarted;
 
         public GameObject[] objectsToHide;
 
         public GameObject camera;
         private PlayerCamera playerCamera;
+        
+        public enum audioMode
+        {
+            keepPlaying,
+            stopRestart,
+            stopContinue,
+            fadeOut
+        }
 
         [Header("Audio Control")]
-        [Tooltip("0 = Stop BGM And Restart After Cutscene; 1 = Volume Is 0; 2 = Fade Out; 3 = Don't Stop")]
+        public audioMode audioSimmer;
+
+        [HideInInspector]
+        // 0 = Stop BGM And Restart After Cutscene; 1 = Volume Is 0; 2 = Fade Out; 3 = Don't Stop
         public int audioSimmerMode;
         private float bgmVal;
 
@@ -58,6 +71,8 @@ namespace P06Cutscenes
 
         public newCharacter changeCharacter;
 
+        public AutoDisable currentAD;
+
         private float timer;
         private float maxTime;
         private bool started;
@@ -71,10 +86,23 @@ namespace P06Cutscenes
         private GameManager gameManager;
         private float igtime;
 
+        private bool triggered;
+
         private void Start()
         {
+            if (animators == null)
+                animators = new Animator[0];
+            if (clips == null)
+                clips = new AnimationClip[0];
+            if (sounds == null)
+                sounds = new AudioClip[0];
+            if (soundStartTimes == null)
+                soundStartTimes = new float[0];
+            if (objectsToHide == null)
+                objectsToHide = new GameObject[0];
+
             sources = new List<AudioSource>();
-            isPlaying = new List<bool>();
+            sourceStarted = new List<bool>();
 
             for (int i = 0; i < clips.Length; i++)
             {
@@ -88,18 +116,25 @@ namespace P06Cutscenes
 
             uiObject = FindObjectOfType<UI>().gameObject;
 
-            if (animators == null)
-                animators = new Animator[0];
-            if (clips == null)
-                clips = new AnimationClip[0];
-            if (sounds == null)
-                sounds = new AudioClip[0];
-            if (soundStartTimes == null)
-                soundStartTimes = new float[0];
-            if (objectsToHide == null)
-                objectsToHide = new GameObject[0];
-
             gameManager = FindObjectOfType<GameManager>();
+
+            switch (audioSimmer)
+            {
+                case audioMode.keepPlaying:
+                    audioSimmerMode = 3;
+                    break;
+                case audioMode.stopContinue:
+                    audioSimmerMode = 1;
+                    break;
+                case audioMode.stopRestart:
+                    audioSimmerMode = 0;
+                    break;
+                case audioMode.fadeOut:
+                    audioSimmerMode = 2;
+                    break;
+                default:
+                    break;
+            }
         }
 
         public void StartCutscene()
@@ -116,7 +151,7 @@ namespace P06Cutscenes
                 sources[i].playOnAwake = false;
                 sources[i].loop = false;
                 sources[i].clip = sounds[i];
-                isPlaying.Add(false);
+                sourceStarted.Add(false);
             }
 
             player.SetActive(false);
@@ -143,7 +178,8 @@ namespace P06Cutscenes
                 mainSource.Play();
             }
 
-            uiObject.SetActive(false);
+            if(hideUI)
+                uiObject.SetActive(false);
 
             for (int i = 0; i < objectsToHide.Length; i++)
             {
@@ -155,18 +191,28 @@ namespace P06Cutscenes
             playerCamera.GetComponent<StateMachine>().enabled = false;
             playerCamera.enabled = false;
 
-            playerCamera.transform.SetParent(camera.transform);
-            playerCamera.transform.localPosition = Vector3.zero;
-            playerCamera.transform.localRotation = new Quaternion();
+            if (camera != null)
+            {
+                playerCamera.transform.SetParent(camera.transform);
+                playerCamera.transform.localPosition = Vector3.zero;
+                playerCamera.transform.localRotation = new Quaternion();
+            }
 
             started = true;
         }
 
-        private void OnTriggerEnter(Collider other)
+        internal void OnTriggerEnter(Collider other)
         {
-            if (other.tag == "Player")
+            if (other.tag == "Player" && !triggered)
             {
                 player = other.gameObject;
+
+                triggered = true;
+
+                if(maxTime == 0 && tpPoint == null)
+                {
+                    return;
+                }
 
                 StartCutscene();
             }
@@ -184,10 +230,10 @@ namespace P06Cutscenes
 
             for (int i = 0; i < sources.Count; i++)
             {
-                if (timer > soundStartTimes[i] && !isPlaying[i])
+                if (timer > soundStartTimes[i] && !sourceStarted[i])
                 {
                     sources[i].Play();
-                    isPlaying[i] = true;
+                    sourceStarted[i] = true;
                 }
             }
 
@@ -219,7 +265,11 @@ namespace P06Cutscenes
 
                 mainSource.volume = bgmVal;
 
-                uiObject.SetActive(true);
+                if (hideUI)
+                {
+                    uiObject.SetActive(true);
+                                    gameManager._PlayerData.time = igtime;
+                }
 
                 for (int i = 0; i < objectsToHide.Length; i++)
                 {
@@ -265,7 +315,7 @@ namespace P06Cutscenes
                     case newCharacter.keep:
                         break;
                     case newCharacter.sonic_new:
-                        ChangeCharacter("sonic_ new", 0);
+                        ChangeCharacter("sonic_new", 0);
                         break;
                     case newCharacter.sonic_fast:
                         ChangeCharacter("sonic_fast", 0);
@@ -296,7 +346,16 @@ namespace P06Cutscenes
                         break;
                 }
 
-                gameManager._PlayerData.time = igtime;
+                if (currentAD != null)
+                {
+                    currentAD.inArea = false;
+                    currentAD.triggerEx = true;
+                }
+
+                for (int i = 0; i < animators.Length; i++)
+                {
+                    animators[i].SetBool("start", false);
+                }
 
                 if (nextCutscene != null)
                 {
@@ -326,6 +385,8 @@ namespace P06Cutscenes
             newchar.SetPlayer(id, name);
             newchar.StartPlayer(false);
             Destroy(pb.gameObject);
+
+            player = newchar.gameObject;
         }
 
         private void FindCam()
@@ -340,6 +401,20 @@ namespace P06Cutscenes
 
                     break;
                 }
+            }
+        }
+
+        private void OnDrawGizmos()
+        {
+            if (gameObject.GetComponent<BoxCollider>())
+            {
+                Gizmos.color = new Color(0, 0, 1, 0.3f);
+                Gizmos.DrawCube(transform.position + gameObject.GetComponent<BoxCollider>().center, gameObject.GetComponent<BoxCollider>().size);
+            }
+            if (gameObject.GetComponent<SphereCollider>())
+            {
+                Gizmos.color = new Color(0, 0, 1, 0.3f);
+                Gizmos.DrawSphere(transform.position + gameObject.GetComponent<SphereCollider>().center, gameObject.GetComponent<SphereCollider>().radius);
             }
         }
     }

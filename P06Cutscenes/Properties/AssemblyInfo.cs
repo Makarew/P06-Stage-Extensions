@@ -2,18 +2,18 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using MelonLoader;
-using P06Cutscenes;
+using StageExtensions;
 
-[assembly: MelonInfo(typeof(CutsceneMain), "P06Cutscenes", "1.0.1", "Makarew")]
+[assembly: MelonInfo(typeof(CutsceneMain), "Stage Extensions", "1.1.0", "Makarew")]
 
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("P06Cutscenes")]
+[assembly: AssemblyTitle("StageExtensions")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("P06Cutscenes")]
+[assembly: AssemblyProduct("StageExtensions")]
 [assembly: AssemblyCopyright("Copyright ©  2022")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
