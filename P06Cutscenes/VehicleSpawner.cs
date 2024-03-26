@@ -31,19 +31,19 @@ namespace StageExtensions
             {
                 case SpawnerType.Bike:
                     name += "Bike";
-                    VehicleReferences[0].SetActive(true);
+                    transform.Find("BikeDummyModel").gameObject.SetActive(true);
                     break;
                 case SpawnerType.Jeep:
                     name += "Jeep";
-                    VehicleReferences[1].SetActive(true);
+                    transform.Find("JeepDummyModel").gameObject.SetActive(true);
                     break;
                 case SpawnerType.Hover:
                     name += "Hover";
-                    VehicleReferences[2].SetActive(true);
+                    transform.Find("HoverDummyModel").gameObject.SetActive(true);
                     break;
                 case SpawnerType.Glider:
                     name += "Glider";
-                    VehicleReferences[3].SetActive(true);
+                    transform.Find("GliderDummyModel").gameObject.SetActive(true);
                     break;
             }
 
@@ -52,11 +52,15 @@ namespace StageExtensions
 
         private void DisableAll()
         {
-            for (int i = 0; i < VehicleReferences.Length; i++)
-            {
-                VehicleReferences[i].tag = "EditorOnly";
-                VehicleReferences[i].SetActive(false);
-            }
+            transform.Find("BikeDummyModel").gameObject.tag = "EditorOnly";
+            transform.Find("JeepDummyModel").gameObject.tag = "EditorOnly";
+            transform.Find("HoverDummyModel").gameObject.tag = "EditorOnly";
+            transform.Find("GliderDummyModel").gameObject.tag = "EditorOnly";
+
+            transform.Find("BikeDummyModel").gameObject.SetActive(false);
+            transform.Find("JeepDummyModel").gameObject.SetActive(false);
+            transform.Find("HoverDummyModel").gameObject.SetActive(false);
+            transform.Find("GliderDummyModel").gameObject.SetActive(false);
         }
 
         private void Start()
