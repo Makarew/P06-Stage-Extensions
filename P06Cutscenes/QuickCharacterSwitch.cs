@@ -1,13 +1,22 @@
 ﻿using UnityEngine;
+using static StageExtensions.Cutscene;
 
 namespace StageExtensions
 {
     public class QuickCharacterSwitch : MonoBehaviour
     {
         public Cutscene.newCharacter character;
+        private float switchDelay = -1;
+
+        public void Update()
+        {
+            if (switchDelay > 0) switchDelay -= Time.deltaTime;
+        }
 
         private void OnTriggerEnter(Collider other)
         {
+            if (switchDelay > 0) return;
+
             if (other.tag == "Player")
             {
                 SwitchCharacter(character);
@@ -18,7 +27,7 @@ namespace StageExtensions
         {
             switch (character)
             {
-                case Cutscene.newCharacter.keep:
+                default:
                     break;
                 case Cutscene.newCharacter.sonic_new:
                     ChangeCharacter("sonic_new", 0);
@@ -50,6 +59,12 @@ namespace StageExtensions
                 case Cutscene.newCharacter.omega:
                     ChangeCharacter("omega", 6);
                     break;
+                case Cutscene.newCharacter.blaze:
+                    ChangeCharacter("blaze", 8);
+                    break;
+                case Cutscene.newCharacter.amy:
+                    ChangeCharacter("amy", 9);
+                    break;
             }
         }
 
@@ -61,6 +76,8 @@ namespace StageExtensions
             newchar.SetPlayer(id, name);
             newchar.StartPlayer(false);
             Destroy(pb.gameObject);
+
+            switchDelay = 0.2f;
         }
     }
 }

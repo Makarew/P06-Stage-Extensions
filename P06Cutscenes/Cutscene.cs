@@ -66,7 +66,9 @@ namespace StageExtensions
             tails,
             knuckles,
             rouge,
-            omega
+            omega,
+            blaze,
+            amy
         }
 
         public newCharacter changeCharacter;
@@ -343,6 +345,12 @@ namespace StageExtensions
                         break;
                     case newCharacter.omega:
                         ChangeCharacter("omega", 6);
+                        break;
+                    case newCharacter.blaze:
+                        ChangeCharacter("blaze", 8);
+                        break;
+                    case newCharacter.amy:
+                        ChangeCharacter("amy", 9);
                         break;
                 }
 
