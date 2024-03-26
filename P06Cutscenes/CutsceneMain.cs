@@ -37,6 +37,15 @@ namespace StageExtensions
             }
         }
 
+        public override void OnDeinitializeMelon()
+        {
+            base.OnDeinitializeMelon();
+            Bike = null;
+            Jeep = null;
+            Glider = null;
+            Hover = null;
+        }
+
         public override void OnSceneWasLoaded(int buildIndex, string sceneName)
         {
             base.OnSceneWasLoaded(buildIndex, sceneName);
