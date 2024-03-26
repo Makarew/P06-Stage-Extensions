@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 using MelonLoader;
 using StageExtensions;
 
-[assembly: MelonInfo(typeof(CutsceneMain), "Stage Extensions", "1.1.0", "Makarew")]
+[assembly: MelonInfo(typeof(CutsceneMain), "Stage Extensions", "2.0.0", "Makarew")]
 
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
@@ -14,7 +14,7 @@ using StageExtensions;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("StageExtensions")]
-[assembly: AssemblyCopyright("Copyright ©  2022")]
+[assembly: AssemblyCopyright("Copyright ©  2024")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
