@@ -1,6 +1,9 @@
 ﻿using MelonLoader;
 using UnityEngine;
 using System.Collections.Generic;
+using HarmonyLib;
+using P06ML.Metadata;
+using System.Reflection;
 
 namespace StageExtensions
 {
@@ -11,9 +14,16 @@ namespace StageExtensions
         public UnityEngine.Object Glider;
         public UnityEngine.Object Hover;
 
+        internal bool didLoad;
+
         public override void OnInitializeMelon()
         {
             base.OnInitializeMelon();
+            LoadVehicles();
+        }
+
+        private void LoadVehicles()
+        {
             UnityEngine.Object[] commonItems = Resources.LoadAll("defaultprefabs/objects");
 
             for (int i = 0; i < commonItems.Length; i++)
@@ -34,6 +44,17 @@ namespace StageExtensions
                 {
                     Glider = commonItems[i];
                 }
+            }
+
+            if (Bike != null)
+            {
+                didLoad = true;
+
+                HarmonyLib.Harmony harmony = new HarmonyLib.Harmony("StageExtenstions");
+                MethodInfo smLoad = AccessTools.Method(typeof(StageMetadata), "Load");
+                MethodInfo smLoadPatch = AccessTools.Method(typeof(CutsceneMain), nameof(CutsceneMain.StageMetadataPatch));
+
+                harmony.Patch(smLoad, null, new HarmonyMethod(smLoadPatch));
             }
         }
 
@@ -69,6 +90,11 @@ namespace StageExtensions
                         break;
                 }
             }
+
+            if (sceneName == "Disclaimer" && !didLoad)
+            {
+                LoadVehicles();
+            }
         }
 
         public override void OnUpdate()
@@ -87,5 +113,16 @@ namespace StageExtensions
             }
             return list.ToArray();
         }
+
+            public static void StageMetadataPatch(ref StageMetadata __result, string path)
+            {
+                StageMetadataNew smn = StageMetadataNew.Load(path);
+
+                if (smn.RequireStageExtensions == StageMetadataNew.RequireSE.Not_Required) return;
+
+                __result.Description = smn.DescriptionSE;
+                __result.AssetBundle = __result.Location + "\\" + smn.AssetBundleSE;
+                __result.Title = smn.TitleSE;
+            }
     }
 }
