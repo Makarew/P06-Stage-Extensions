@@ -12,6 +12,7 @@
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <GameDir>D:\Games\Sonic the Hedgehog (P-06) - Silver</GameDir>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -31,11 +32,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="0Harmony">
+      <HintPath>$(GameDir)\MelonLoader\0Harmony.dll</HintPath>
+    </Reference>
     <Reference Include="Assembly-CSharp">
-      <HintPath>D:\Games\Sonic the Hedgehog (P-06) - Silver\Sonic the Hedgehog_Data\Managed\Assembly-CSharp.dll</HintPath>
+      <HintPath>$(GameDir)\Sonic the Hedgehog_Data\Managed\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="MelonLoader">
-      <HintPath>D:\Games\Sonic the Hedgehog (P-06) - Silver\MelonLoader\MelonLoader.dll</HintPath>
+      <HintPath>$(GameDir)\MelonLoader\MelonLoader.dll</HintPath>
+    </Reference>
+    <Reference Include="P06ML">
+      <HintPath>$(GameDir)\Mods\P06ML.dll</HintPath>
     </Reference>
     <Reference Include="Rewired_Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -50,20 +57,20 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
     <Reference Include="UnityEngine">
-      <HintPath>E:\Games\Sonic the Hedgehog (P-06)\Sonic the Hedgehog_Data\Managed\UnityEngine.dll</HintPath>
+      <HintPath>$(GameDir)\Sonic the Hedgehog_Data\Managed\UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AnimationModule">
-      <HintPath>E:\Games\Sonic the Hedgehog (P-06)\Sonic the Hedgehog_Data\Managed\UnityEngine.AnimationModule.dll</HintPath>
+      <HintPath>$(GameDir)\Sonic the Hedgehog_Data\Managed\UnityEngine.AnimationModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AudioModule">
-      <HintPath>E:\Games\Sonic the Hedgehog (P-06)\Sonic the Hedgehog_Data\Managed\UnityEngine.AudioModule.dll</HintPath>
+      <HintPath>$(GameDir)\Sonic the Hedgehog_Data\Managed\UnityEngine.AudioModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
-      <HintPath>E:\Games\Sonic the Hedgehog (P-06)\Sonic the Hedgehog_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+      <HintPath>$(GameDir)\Sonic the Hedgehog_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.PhysicsModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>E:\Games\Sonic the Hedgehog (P-06)\Sonic the Hedgehog_Data\Managed\UnityEngine.PhysicsModule.dll</HintPath>
+      <HintPath>$(GameDir)\Sonic the Hedgehog_Data\Managed\UnityEngine.PhysicsModule.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -76,6 +83,7 @@
     <Compile Include="PsychokinesisObject.cs" />
     <Compile Include="QuickCharacterSwitch.cs" />
     <Compile Include="SaveFile.cs" />
+    <Compile Include="StageMetadataNew.cs" />
     <Compile Include="StatModifier.cs" />
     <Compile Include="SwitchCutscene.cs" />
     <Compile Include="Teleporter.cs" />
